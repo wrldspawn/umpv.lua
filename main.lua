@@ -249,8 +249,7 @@ if hasSocket then
 			end
 		end)
 	end
+	uv.run()
 else
 	pcall(start, paths)
 end
-
-uv.run()
