@@ -156,6 +156,10 @@ local function start(files)
 	mpvArgs[#mpvArgs + 1] = "--input-ipc-server=" .. sockPath
 	mpvArgs[#mpvArgs + 1] = "--"
 
+	for i, f in ipairs(files) do
+		files[i] = '"' .. f .. '"'
+	end
+
 	if keepProcess then
 		os.execute(table.concat(merge(exe, mpvArgs, files), " "))
 	else
