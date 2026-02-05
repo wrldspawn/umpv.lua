@@ -66,10 +66,6 @@ umpv -- --force-media-title="some title" file_or_url
 
 ### [mpv-install](https://github.com/rossy/mpv-install)
 
-> [!TIP]
-> If you have Visual Studio Build Tools installed, run `editbin /subsystem:windows umpv.exe` to prevent umpv from
-> creating a console window.
-
 ```bat
 set mpv_args=--loadfile-flag=replace --ipc-server=\\.\pipe\umpv-file -- --idle=yes --resume-playback=no --save-position-on-quit=no
 set mpv_path=%userprofile%\.local\bin\umpv.exe
