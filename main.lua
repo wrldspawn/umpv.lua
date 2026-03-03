@@ -93,9 +93,10 @@ if not isWindows and canSend() then
 	sock:connect(sockPath, function(err)
 		if err ~= nil then
 			local ok = uv.fs_unlink(sockPath)
-			assert(not ok, "failed to remove socket after error")
+			assert(ok, "failed to remove socket")
 		end
 	end)
+	uv.run()
 end
 
 local function send(data)
