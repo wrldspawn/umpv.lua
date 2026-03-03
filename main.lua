@@ -94,6 +94,9 @@ if not isWindows and canSend() then
 		if err ~= nil then
 			local ok = uv.fs_unlink(sockPath)
 			assert(ok, "failed to remove socket")
+		else
+			sock:close()
+			sock = uv.new_pipe(false)
 		end
 	end)
 	uv.run()
