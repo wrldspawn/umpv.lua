@@ -89,6 +89,15 @@ local function canSend()
 	return stat ~= nil
 end
 
+if not isWindows and canSend() then
+	sock:connect(sockPath, function(err)
+		if err ~= nil then
+			local ok = uv.fs_unlink(sockPath)
+			assert(not ok, "failed to remove socket after error")
+		end
+	end)
+end
+
 local function send(data)
 	sock:connect(sockPath, function(err)
 		assert(not err, err)
@@ -239,8 +248,7 @@ for _, arg in ipairs(args) do
 	end
 end
 
-local hasSocket = canSend()
-if hasSocket then
+if canSend() then
 	pcall(sendFile, paths, mpvArgs)
 	if keepProcess then
 		-- NB: process exits if nothing is sent to stdout whyyyyyyy
