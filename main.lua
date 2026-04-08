@@ -75,7 +75,7 @@ end
 
 -- check next to exe
 if configDir == nil then
-	local path = uv.cwd()
+	local path = uv.exepath()
 	local f = uv.fs_stat(path .. "/umpv.conf")
 	if f ~= nil then
 		configDir = path
@@ -121,9 +121,23 @@ local function sanitize(str)
 	return str:gsub("\\", "\\\\"):gsub('"', '\\"'):gsub("\n", "\\n")
 end
 
+local function resolvePath(path)
+	if path:find("://") then return path end
+	if path:find(isWindows and ":" or "^/") then return path end
+
+	local rpath = uv.cwd() .. "/" .. path
+	local f = uv.fs_stat(rpath)
+	if f ~= nil then
+		return sanitize(rpath)
+	end
+
+	return path
+end
+
 local loadFlag = "append-play"
 local function formatFile(path, args)
-	local msg = string.format('raw loadfile "%s" %s', sanitize(path), loadFlag)
+	local p = sanitize(path)
+	local msg = string.format('raw loadfile "%s" %s', resolvePath(p), loadFlag)
 	if #args > 0 then
 		msg = msg .. string.format(' 0 "%s"', sanitize(table.concat(args, ",")))
 	end
