@@ -170,8 +170,10 @@ local function start(files)
 	mpvArgs[#mpvArgs + 1] = "--input-ipc-server=" .. sockPath
 	mpvArgs[#mpvArgs + 1] = "--"
 
-	for i, f in ipairs(files) do
-		files[i] = '"' .. f .. '"'
+	if isWindows then
+		for i, f in ipairs(files) do
+			files[i] = '"' .. f .. '"'
+		end
 	end
 
 	if keepProcess then
