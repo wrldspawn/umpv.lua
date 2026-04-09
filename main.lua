@@ -89,19 +89,6 @@ local function canSend()
 	return stat ~= nil
 end
 
-if not isWindows and canSend() then
-	sock:connect(sockPath, function(err)
-		if err ~= nil then
-			local ok = uv.fs_unlink(sockPath)
-			assert(ok, "failed to remove socket")
-		else
-			sock:close()
-			sock = uv.new_pipe(false)
-		end
-	end)
-	uv.run()
-end
-
 local function send(data)
 	sock:connect(sockPath, function(err)
 		assert(not err, err)
@@ -264,6 +251,19 @@ for _, arg in ipairs(args) do
 	else
 		paths[#paths + 1] = arg
 	end
+end
+
+if not isWindows and canSend() then
+	sock:connect(sockPath, function(err)
+		if err ~= nil then
+			local ok = uv.fs_unlink(sockPath)
+			assert(ok, "failed to remove socket")
+		else
+			sock:close()
+			sock = uv.new_pipe(false)
+		end
+	end)
+	uv.run()
 end
 
 if canSend() then
